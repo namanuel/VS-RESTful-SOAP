@@ -12,7 +12,7 @@ if(isset($_GET['name'])){
 	require_once('class.phpwsdlclient.php');// All depencies are loaded here
 	ini_set('soap.wsdl_cache_enabled',0);	// Disable caching in PHP
 	PhpWsdl::$CacheTime=0;					// Disable caching in PhpWsdl
-	$client=new PhpWsdlClient('http://wan24.de/test/phpwsdl2/demo4.php?WSDL');// The constructor has to be called with the target webservice WSDL URI
+	$client=new PhpWsdlClient('http://wan24.de/test/phpwsdl2/soapserver.php?WSDL');// The constructor has to be called with the target webservice WSDL URI
 	?><html><head><title>SOAP demo</title></head><body><p><?
 	echo htmlentities($client->SayHello($_GET['name']));// Perform the SOAP request and output the response
 
@@ -22,7 +22,7 @@ if(isset($_GET['name'])){
 	// PhpWsdlClient can produce a documented PHP SOAP client for you
 	/*$php=$client->CreatePhpSoapClient(null,Array('openphp'=>false));// $php will contain the generated PHP SOAP client source code
 	eval($php);// This will load the SOAP client classes from the PHP code string
-	$soapDemo=new SoapDemoSoapClient();// Create an instance of the generated class (the name of the webservice+"SoapClient" is the default class name)
+	$soapDemo=new clientcontroll();// Create an instance of the generated class (the name of the webservice+"SoapClient" is the default class name)
 	echo htmlentities($soapDemo->SayHello('you'));*/
 	
 	?></p></body></html><?php
