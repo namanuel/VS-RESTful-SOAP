@@ -11,6 +11,8 @@ require_once('class.phpwsdl.php');
 PhpWsdl::RunQuickMode();// -> Don't waste my time - just run!
 
 class SoapDemo{
+    static public $API_KEY = "hallo_123";
+    public $PLZ = 1010;
     /**
      * Say hello to...
      *
@@ -44,4 +46,34 @@ class SoapDemo{
         return $num1+$num2;
     }
 
+    /**
+     * Say hello to...
+     *
+     * @param string $api_key is our Security solver :D
+     * @param int $plz our Location
+     * @param int $ts our TimeStamp
+     * @return string Response
+     */
+    public function get_current_temperature($api_key, $plz, $ts){
+
+        //abfrage
+        if(time()-$ts <= 600) {
+            return "istok";
+
+        }else{
+            return "nichtok";
+        }
+        if (strcmp(self::$API_KEY, $api_key) == 0) {
+            //$current_temperature = mt_rand(10, 40);
+            return "OK";
+            //$current_temperature;
+        } else {
+            return "neinneinneinnein!!!!!";
+        }
+
+//weatherforecast
+        //array zurückgeben
+    }
+//self eigene klasse
+//this im eigenen objekt
 }

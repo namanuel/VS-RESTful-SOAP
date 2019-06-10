@@ -40,8 +40,26 @@ class SoapDemoSoapClient{
 			$name
 		));
 	}
+    /**
+     * Say hello to...
+     *
+     * @param string $api_key is our Security solver :D
+     * @param int $plz our Location
+     * @param int $ts our TimeStamp
+     * @return
+     */
+    public function get_current_temperature($api_key,$plz,$ts){
+        return self::_Call('get_current_temperature',Array(
+            $api_key,
+            $plz,
+            $ts
+        ));
+    }
 }
 $client = new SoapDemoSoapClient();
 
 echo $client->SayHello("Guenther");
+echo $client->get_current_temperature("OKAY",0,time());
 
+
+echo time();

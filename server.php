@@ -16,15 +16,16 @@ class Server{
     {
 
     }
-    public function get_current_temperature($api_key, $plz, $ts,$unit){
+    public function get_current_temperature($api_key, $plz, $ts){
         $id_array = mt_rand(10, 40);
         return $id_array;
     }
-    public function get_current_wind_speed($api_key, $plz, $unit){
+    public function get_current_wind_speed($api_key, $plz){
         $id_array = mt_rand(0, 100);
         return ($id_array);
     }
     public function get_current_wind_direction(){
+        //grad
         $direction = array("Norden", "Sueden", "Osten", "Westen");
         $id_array = $direction[array_rand($direction)];
         return $id_array;
