@@ -1,4 +1,6 @@
 <?php
+require("mqtt/phpMQTT.php");
+require("mqtt/config.php");
 /**
  * @service clientcontroll
  */
@@ -162,9 +164,40 @@ echo "Aktuelle Windrichtung: ".$client->get_current_wind_direction($api_key,time
 echo "<h3> 7 Tage Vorhersage: </h3><br>";
 
 
-echo $client->get_weather_forecast($api_key,time(),$plz);
+
+// Publishen der Windgeschwindigkeit mit Hilfe von MQTT
+$message = $client->get_current_wind_speed($api_key,time(),$plz)."km/h";
+//MQTT client id to use for the device. "" will generate a client id automatically
+$mqtt = new bluerhinos\phpMQTT($server, $port, "ClientID".rand());
+
+if ($mqtt->connect(true,NULL,$username,$password)) {
+    $mqtt->publish("lights/light1/lumen",$message, 0);
+    $mqtt->close();
+}else{
+    echo "Fail or time out
+";
+}
 
 
 
+//echo $client->get_weather_forecast($api_key,time(),$plz);
+?>
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+      <!-- Autorefresh alle 60s -->
+      <meta http-equiv="refresh" content="60">
+    <title>SmartHomies</title>
+  </head>
+  <body>
+
+
+  </div>
+  </body>
+</html>
 
 
