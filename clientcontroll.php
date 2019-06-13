@@ -10,7 +10,7 @@ class clientcontroll{
 	 *
 	 * @var string
 	 */
-	public static $_WsdlUri='http://localhost/WeatherService/soapserver.php?WSDL';
+	public static $_WsdlUri='http://localhost/VS-RESTful-SOAP-master/VS-RESTful-SOAP/soapserver.php?WSDL';
 	/**
 	 * The PHP SoapClient object
 	 *
@@ -144,24 +144,70 @@ class clientcontroll{
 $api_key = "CEVIKMEDICKENAGELBESTE";
 $plz = 1010;
 $client = new clientcontroll();
+$i = 0;
 
-echo "<H1>SOAP Wetter Service</H1>";
+echo "<H1>SOAP Weather Service</H1>";
 
-echo "<h3>Wetter Heute im ".$plz."</h3>";
+echo "<h3>Weather today in ".$plz."</h3>";
 
-echo "Aktuelle Temperatur: ".$client->get_current_temperature($api_key,time(),$plz)."°C"."<br>";
+echo "Current temperature: ".$client->get_current_temperature($api_key,time(),$plz)."°C"."<br>";
 
-echo "Aktuelles Wetter: ".$client->get_current_weather_state($api_key,time(),$plz)."<br>";
+echo "Current weather: ".$client->get_current_weather_state($api_key,time(),$plz)."<br>";
 
-echo "Aktuelle Temperatur min: ".$client->get_current_temperature_min($api_key,time(),$plz)."°C"."<br>";
+echo "Current temperature min: ".$client->get_current_temperature_min($api_key,time(),$plz)."°C"."<br>";
 
-echo "Aktuelle Temperatur max: ".$client->get_current_temperature_max($api_key,time(),$plz)."°C"."<br>";
+echo "Current temperature max: ".$client->get_current_temperature_max($api_key,time(),$plz)."°C"."<br>";
 
-echo "Aktuelle Windgeschwindigkeit: ".$client->get_current_wind_speed($api_key,time(),$plz)."km/h"."<br>";
+echo "Current wind speed: ".$client->get_current_wind_speed($api_key,time(),$plz)." km/h"."<br>";
 
-echo "Aktuelle Windrichtung: ".$client->get_current_wind_direction($api_key,time(),$plz)."°"."<br>";
+echo "Current wind direction: ".$client->get_current_wind_direction($api_key,time(),$plz)."°"."<br>";
 
-echo "<h3> 7 Tage Vorhersage: </h3><br>";
+echo "<hr/>";
+
+echo "<h3> 7 Day weather-forecast: </h3>";
+
+//echo print_r($client->get_weather_forecast($api_key,time(),$plz))."<br>";
+foreach ($client->get_weather_forecast($api_key,time(),$plz) as $nextday){
+
+    if($i==0){
+        echo "<h4>"."Tomorrow"."</h4><br>";
+        $i++;
+    }elseif ($i==1){
+        echo "<h4>"."The day after Tomorrow"."</h4><br>";
+        $i++;
+    }elseif ($i==2){
+        echo "<h4>"."Third Day"."</h4><br>";
+        $i++;
+    }elseif ($i==3){
+        echo "<h4>"."Fourth Day"."</h4><br>";
+        $i++;
+    }elseif ($i==4){
+        echo "<h4>"."Fifth Day"."</h4><br>";
+        $i++;
+    }elseif ($i==5){
+        echo "<h4>"."Sixth Day"."</h4><br>";
+        $i++;
+    }elseif ($i==6){
+        echo "<h4>"."Seventh Day"."</h4><br>";
+        $i++;
+    }
+    echo "Current temperature: ".$nextday['current_temperature']."°C"."<br>";
+
+    echo "Current weather: ".$nextday['current_state']."<br>";
+
+    echo "Current temperature min: ".$nextday['current_temperature_min']."°C"."<br>";
+
+    echo "Current temperature max: ".$nextday['current_temperature_max']."°C"."<br>";
+
+    echo "Current wind speed: ".$nextday['current_wind_speed']." km/h"."<br>";
+
+    echo "Current wind direction: ".$nextday['current_wind_direction']."°"."<br>";
+    echo "<hr />";
+
+}
+//echo var_dump($client->get_weather_forecast($api_key,time(),$plz));
+
+//echo date('z')+1;
 
 
 
@@ -174,13 +220,12 @@ if ($mqtt->connect(true,NULL,$username,$password)) {
     $mqtt->publish("lights/light1/lumen",$message, 0);
     $mqtt->close();
 }else{
-    echo "Fail or time out
-";
+    echo "Fail or time out";
 }
 
 
 
-//echo $client->get_weather_forecast($api_key,time(),$plz);
+
 ?>
 
 

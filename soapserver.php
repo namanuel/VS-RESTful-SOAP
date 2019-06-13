@@ -2,17 +2,19 @@
 
 // A quick and dirty SOAP server example
 
-ini_set('soap.wsdl_cache_enabled',0);	// Disable caching in PHP
-$PhpWsdlAutoRun=true;					// With this global variable PhpWsdl will autorun in quick mode, too
+ini_set('soap.wsdl_cache_enabled', 0);    // Disable caching in PHP
+$PhpWsdlAutoRun = true;                    // With this global variable PhpWsdl will autorun in quick mode, too
 require_once('class.phpwsdl.php');
 
 // In quick mode you can specify the class filename(s) of your webservice 
 // optional parameter, if required.
 PhpWsdl::RunQuickMode();// -> Don't waste my time - just run!
 
-class WeatherServer{
+class WeatherServer
+{
     static public $API_KEY = "CEVIKMEDICKENAGELBESTE";
     static public $PLZ = 1010;
+
     /**
      * Current Temperature
      *
@@ -21,10 +23,12 @@ class WeatherServer{
      * @param int $plz our Location
      * @return int current_temperature
      */
-    public function get_current_temperature($api_key,$ts, $plz )
+    public function get_current_temperature($api_key, $ts, $plz)
     {
+        srand(date('z') + 1);
         if (strcmp(self::$API_KEY, $api_key) == 0) {
             if (time() - $ts <= 600) {
+                srand(date('z') + 1);
                 $current_temperature = mt_rand(0, 30);
                 return $current_temperature;
             } else {
@@ -34,6 +38,7 @@ class WeatherServer{
             return "go away";
         }
     }
+
     /**
      * Current Weather State
      *
@@ -42,15 +47,15 @@ class WeatherServer{
      * @param int $plz our Location
      * @return string current_state
      */
-    public function get_current_weather_state($api_key,$ts, $plz )
+    public function get_current_weather_state($api_key, $ts, $plz)
     {
 
         if (strcmp(self::$API_KEY, $api_key) == 0) {
             if (time() - $ts <= 600) {
-                if($this->get_current_temperature(self::$API_KEY,time(),self::$PLZ)>10){
-                    $state = array("Regen", "Bewoelkt", "Sonnig", "Hagel");
+                if ($this->get_current_temperature(self::$API_KEY, time(), self::$PLZ) > 10) {
+                    $state = array("Regen", "Bewoelkt", "Sonnig", "Hagel", "Klar");
                     $current_state = $state[array_rand($state)];
-                }else{
+                } else {
                     $current_state = "Schnee";
                 }
 
@@ -62,6 +67,7 @@ class WeatherServer{
             return "go away";
         }
     }
+
     /**
      * Current Temperature min
      *
@@ -70,12 +76,12 @@ class WeatherServer{
      * @param int $plz our Location
      * @return int current_temperature_min
      */
-    public function get_current_temperature_min($api_key,$ts, $plz )
+    public function get_current_temperature_min($api_key, $ts, $plz)
     {
 
         if (strcmp(self::$API_KEY, $api_key) == 0) {
             if (time() - $ts <= 600) {
-                $current_temperature_min = $this->get_current_temperature(self::$API_KEY,time(),self::$PLZ)- mt_rand(0, 5);
+                $current_temperature_min = $this->get_current_temperature(self::$API_KEY, time(), self::$PLZ) - mt_rand(0, 5);
                 return $current_temperature_min;
             } else {
                 return "go away";
@@ -93,12 +99,12 @@ class WeatherServer{
      * @param int $plz our Location
      * @return int current_temperature_max
      */
-    public function get_current_temperature_max($api_key,$ts, $plz )
+    public function get_current_temperature_max($api_key, $ts, $plz)
     {
 
         if (strcmp(self::$API_KEY, $api_key) == 0) {
             if (time() - $ts <= 600) {
-                $current_temperature_max  = $this->get_current_temperature(self::$API_KEY,time(),self::$PLZ)+ mt_rand(0, 5);
+                $current_temperature_max = $this->get_current_temperature(self::$API_KEY, time(), self::$PLZ) + mt_rand(0, 5);
                 return $current_temperature_max;
             } else {
                 return "go away";
@@ -107,6 +113,7 @@ class WeatherServer{
             return "go away";
         }
     }
+
     /**
      * Current Wind Speed
      *
@@ -115,12 +122,12 @@ class WeatherServer{
      * @param int $plz our Location
      * @return int current_wind_speed
      */
-    public function get_current_wind_speed($api_key,$ts, $plz )
+    public function get_current_wind_speed($api_key, $ts, $plz)
     {
 
         if (strcmp(self::$API_KEY, $api_key) == 0) {
             if (time() - $ts <= 600) {
-                $current_wind_speed = mt_rand(0, 200);
+                $current_wind_speed = mt_rand(0, 75);
                 return $current_wind_speed;
             } else {
                 return "go away";
@@ -129,6 +136,7 @@ class WeatherServer{
             return "go away";
         }
     }
+
     /**
      * Current Wind Direction
      *
@@ -137,7 +145,7 @@ class WeatherServer{
      * @param int $plz our Location
      * @return int current_wind_direction
      */
-    public function get_current_wind_direction($api_key,$ts, $plz )
+    public function get_current_wind_direction($api_key, $ts, $plz)
     {
 
         if (strcmp(self::$API_KEY, $api_key) == 0) {
@@ -151,6 +159,7 @@ class WeatherServer{
             return "go away";
         }
     }
+
     /**
      * Current Wind Direction
      *
@@ -159,29 +168,107 @@ class WeatherServer{
      * @param int $plz our Location
      * @return array
      */
-    public function get_weather_forecast($api_key,$ts, $plz )
+    public function get_weather_forecast($api_key, $ts, $plz)
     {
+
 
         if (strcmp(self::$API_KEY, $api_key) == 0) {
 
             if (time() - $ts <= 600) {
-               /* for ($x =0;$x<=6;$x++){
-                    $forecast = array(
-                        [$x] => array([current_temperature]=>$current_temperature = mt_rand(0,30),
-                            //[current_state]=>$current_state,
-                            [current_temperature_min]=>$current_temperature_min = $current_temperature - mt_rand(0, 5),
-                            [current_temperature_max]=>$current_temperature_max  = $current_temperature + mt_rand(0, 5),
-                            [current_wind_speed]=>$current_wind_speed = mt_rand(0, 200),
-                            [current_wind_direction]=>$current_wind_direction = mt_rand(0, 360))
-                    );
-                }*/
+                $state = array("Regen", "Bewoelkt", "Sonnig", "Hagel");
+                srand(date('z') + 2);
+                $forecast = array(
+                    "morgen" => array(
+                        "current_temperature" => $current_temperature = mt_rand(0, 30),
+                        "current_state" => $current_state = $state[array_rand($state)],
+                        "current_temperature_min" => $current_temperature_min = $current_temperature - mt_rand(0, 5),
+                        "current_temperature_max" => $current_temperature_max = $current_temperature + mt_rand(0, 5),
+                        "current_wind_speed" => $current_wind_speed = mt_rand(0, 200),
+                        "current_wind_direction" => $current_wind_direction = mt_rand(0, 360)),
+                    "uebermorgen" => array(
+                        "current_temperature" => $current_temperature = mt_rand(0, 30),
+                        "current_state" => $current_state = $state[array_rand($state)],
+                        "current_temperature_min" => $current_temperature_min = $current_temperature - mt_rand(0, 5),
+                        "current_temperature_max" => $current_temperature_max = $current_temperature + mt_rand(0, 5),
+                        "current_wind_speed" => $current_wind_speed = mt_rand(0, 200),
+                        "current_wind_direction" => $current_wind_direction = mt_rand(0, 360)),
+                    "dritter Tag" => array(
+                        "current_temperature" => $current_temperature = mt_rand(0, 30),
+                        "current_state" => $current_state = $state[array_rand($state)],
+                        "current_temperature_min" => $current_temperature_min = $current_temperature - mt_rand(0, 5),
+                        "current_temperature_max" => $current_temperature_max = $current_temperature + mt_rand(0, 5),
+                        "current_wind_speed" => $current_wind_speed = mt_rand(0, 200),
+                        "current_wind_direction" => $current_wind_direction = mt_rand(0, 360)),
+                    "vierter Tag" => array(
+                        "current_temperature" => $current_temperature = mt_rand(0, 30),
+                        "current_state" => $current_state = $state[array_rand($state)],
+                        "current_temperature_min" => $current_temperature_min = $current_temperature - mt_rand(0, 5),
+                        "current_temperature_max" => $current_temperature_max = $current_temperature + mt_rand(0, 5),
+                        "current_wind_speed" => $current_wind_speed = mt_rand(0, 200),
+                        "current_wind_direction" => $current_wind_direction = mt_rand(0, 360)),
+                    "fuenfter Tag" => array(
+                        "current_temperature" => $current_temperature = mt_rand(0, 30),
+                        "current_state" => $current_state = $state[array_rand($state)],
+                        "current_temperature_min" => $current_temperature_min = $current_temperature - mt_rand(0, 5),
+                        "current_temperature_max" => $current_temperature_max = $current_temperature + mt_rand(0, 5),
+                        "current_wind_speed" => $current_wind_speed = mt_rand(0, 200),
+                        "current_wind_direction" => $current_wind_direction = mt_rand(0, 360)),
+                    "sechster Tag" => array(
+                        "current_temperature" => $current_temperature = mt_rand(0, 30),
+                        "current_state" => $current_state = $state[array_rand($state)],
+                        "current_temperature_min" => $current_temperature_min = $current_temperature - mt_rand(0, 5),
+                        "current_temperature_max" => $current_temperature_max = $current_temperature + mt_rand(0, 5),
+                        "current_wind_speed" => $current_wind_speed = mt_rand(0, 200),
+                        "current_wind_direction" => $current_wind_direction = mt_rand(0, 360)),
+                    "siebter Tag" => array(
+                        "current_temperature" => $current_temperature = mt_rand(0, 30),
+                        "current_state" => $current_state = $state[array_rand($state)],
+                        "current_temperature_min" => $current_temperature_min = $current_temperature - mt_rand(0, 5),
+                        "current_temperature_max" => $current_temperature_max = $current_temperature + mt_rand(0, 5),
+                        "current_wind_speed" => $current_wind_speed = mt_rand(0, 200),
+                        "current_wind_direction" => $current_wind_direction = mt_rand(0, 360)));
 
-                return array([current_temperature]=>$current_temperature = mt_rand(0,30),
-                    //[current_state]=>$current_state,
-                    [current_temperature_min]=>$current_temperature_min = $current_temperature - mt_rand(0, 5),
-                    [current_temperature_max]=>$current_temperature_max  = $current_temperature + mt_rand(0, 5),
-                    [current_wind_speed]=>$current_wind_speed = mt_rand(0, 200),
-                    [current_wind_direction]=>$current_wind_direction = mt_rand(0, 360));
+                /*
+                    $marks = array(
+
+                    // Ankit will act as key
+                        [$x]=> array(
+
+                        // Subject and marks are
+                        // the key value pair
+                        "C" => 95,
+                        "DCO" => 85,
+                        "FOL" => 74,
+                    )
+                    // Ram will act as key
+                    "Ram" => array(
+
+                        // Subject and marks are
+                        // the key value pair
+                        "C" => 78,
+                        "DCO" => 98,
+                        "FOL" => 46,
+                    ),
+
+                    // Anoop will act as key
+                    "Anoop" => array(
+
+                        // Subject and marks are
+                        // the key value pair
+                        "C" => 88,
+                        "DCO" => 46,
+                        "FOL" => 99,
+                    ),*/
+
+                return $forecast;
+
+                /*return array($current_temperature = mt_rand(0,30),
+                    $current_state = "test",
+                    $current_temperature_min = $current_temperature - mt_rand(0, 5),
+                    $current_temperature_max  = $current_temperature + mt_rand(0, 5),
+                    $current_wind_speed = mt_rand(0, 200),
+                    $current_wind_direction = mt_rand(0, 360));*/
+
             } else {
                 return "go away";
             }
