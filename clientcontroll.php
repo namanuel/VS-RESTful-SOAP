@@ -1,6 +1,4 @@
 <?php
-require("mqtt/phpMQTT.php");
-require("mqtt/config.php");
 /**
  * @service clientcontroll
  */
@@ -10,7 +8,7 @@ class clientcontroll{
 	 *
 	 * @var string
 	 */
-	public static $_WsdlUri='http://localhost/VS-RESTful-SOAP-master/VS-RESTful-SOAP/soapserver.php?WSDL';
+	public static $_WsdlUri='http://soapservercmn.azurewebsites.net/soapserver.php?WSDL';
 	/**
 	 * The PHP SoapClient object
 	 *
@@ -18,18 +16,20 @@ class clientcontroll{
 	 */
 	public static $_Server=null;
 
-	/**
-	 * Send a SOAP request to the server
-	 *
-	 * @param string $method The method name
-	 * @param array $param The parameters
-	 * @return mixed The server response
-	 */
+    /**
+     * Send a SOAP request to the server
+     *
+     * @param string $method The method name
+     * @param array $param The parameters
+     * @return mixed The server response
+     * @throws SoapFault
+     */
 	public static function _Call($method,$param){
 		if(is_null(self::$_Server))
 			self::$_Server=new SoapClient(self::$_WsdlUri);
 		return self::$_Server->__soapCall($method,$param);
 	}
+
     /**
      * Current Temperature
      *
@@ -37,6 +37,7 @@ class clientcontroll{
      * @param int $ts our TimeStamp
      * @param int $plz our Location
      * @return int current_temperature
+     * @throws SoapFault
      */
     public function get_current_temperature($api_key,$ts,$plz){
         return self::_Call('get_current_temperature',Array(
@@ -45,6 +46,7 @@ class clientcontroll{
             $plz
         ));
     }
+
     /**
      * Current Weather State
      *
@@ -52,6 +54,7 @@ class clientcontroll{
      * @param int $ts our TimeStamp
      * @param int $plz our Location
      * @return string current_state
+     * @throws SoapFault
      */
     public function get_current_weather_state($api_key,$ts,$plz){
         return self::_Call('get_current_weather_state',Array(
@@ -68,6 +71,7 @@ class clientcontroll{
      * @param int $ts our TimeStamp
      * @param int $plz our Location
      * @return int current_temperature_min
+     * @throws SoapFault
      */
     public function get_current_temperature_min($api_key,$ts,$plz){
         return self::_Call('get_current_temperature_min',Array(
@@ -84,6 +88,7 @@ class clientcontroll{
      * @param int $ts our TimeStamp
      * @param int $plz our Location
      * @return int current_temperature_max
+     * @throws SoapFault
      */
     public function get_current_temperature_max($api_key,$ts,$plz){
         return self::_Call('get_current_temperature_max',Array(
@@ -100,6 +105,7 @@ class clientcontroll{
      * @param int $ts our TimeStamp
      * @param int $plz our Location
      * @return int current_wind_speed
+     * @throws SoapFault
      */
     public function get_current_wind_speed($api_key,$ts,$plz){
         return self::_Call('get_current_wind_speed',Array(
@@ -116,6 +122,7 @@ class clientcontroll{
      * @param int $ts our TimeStamp
      * @param int $plz our Location
      * @return int current_wind_direction
+     * @throws SoapFault
      */
     public function get_current_wind_direction($api_key,$ts,$plz){
         return self::_Call('get_current_wind_direction',Array(
@@ -124,13 +131,15 @@ class clientcontroll{
             $plz
         ));
     }
+
     /**
-     * Current Wind Direction
+     * 7 Day Weather Forecast
      *
      * @param string $api_key for the security
      * @param int $ts our TimeStamp
      * @param int $plz our Location
-     * @return int current_wind_direction
+     * @return array
+     * @throws SoapFault
      */
     public function get_weather_forecast($api_key,$ts,$plz){
         return self::_Call('get_weather_forecast',Array(
@@ -205,44 +214,3 @@ foreach ($client->get_weather_forecast($api_key,time(),$plz) as $nextday){
     echo "<hr />";
 
 }
-//echo var_dump($client->get_weather_forecast($api_key,time(),$plz));
-
-//echo date('z')+1;
-
-
-
-// Publishen der Windgeschwindigkeit mit Hilfe von MQTT
-$message = $client->get_current_wind_speed($api_key,time(),$plz)."km/h";
-//MQTT client id to use for the device. "" will generate a client id automatically
-$mqtt = new bluerhinos\phpMQTT($server, $port, "ClientID".rand());
-
-if ($mqtt->connect(true,NULL,$username,$password)) {
-    $mqtt->publish("lights/light1/lumen",$message, 0);
-    $mqtt->close();
-}else{
-    echo "Fail or time out";
-}
-
-
-
-
-?>
-
-
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-      <!-- Autorefresh alle 60s -->
-      <meta http-equiv="refresh" content="60">
-    <title>SmartHomies</title>
-  </head>
-  <body>
-
-
-  </div>
-  </body>
-</html>
-
-

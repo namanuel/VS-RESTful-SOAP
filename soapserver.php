@@ -127,7 +127,7 @@ class WeatherServer
 
         if (strcmp(self::$API_KEY, $api_key) == 0) {
             if (time() - $ts <= 600) {
-                $current_wind_speed = mt_rand(0, 75);
+                $current_wind_speed = mt_rand(0, 100);
                 return $current_wind_speed;
             } else {
                 return "go away";
@@ -161,7 +161,7 @@ class WeatherServer
     }
 
     /**
-     * Current Wind Direction
+     * 7 Day Weather Forecast
      *
      * @param string $api_key for the security
      * @param int $ts our TimeStamp
@@ -175,7 +175,7 @@ class WeatherServer
         if (strcmp(self::$API_KEY, $api_key) == 0) {
 
             if (time() - $ts <= 600) {
-                $state = array("Regen", "Bewoelkt", "Sonnig", "Hagel");
+                $state = array("Regen", "Bewoelkt", "Sonnig", "Hagel", "Klar");
                 srand(date('z') + 2);
                 $forecast = array(
                     "morgen" => array(
@@ -228,46 +228,9 @@ class WeatherServer
                         "current_wind_speed" => $current_wind_speed = mt_rand(0, 200),
                         "current_wind_direction" => $current_wind_direction = mt_rand(0, 360)));
 
-                /*
-                    $marks = array(
-
-                    // Ankit will act as key
-                        [$x]=> array(
-
-                        // Subject and marks are
-                        // the key value pair
-                        "C" => 95,
-                        "DCO" => 85,
-                        "FOL" => 74,
-                    )
-                    // Ram will act as key
-                    "Ram" => array(
-
-                        // Subject and marks are
-                        // the key value pair
-                        "C" => 78,
-                        "DCO" => 98,
-                        "FOL" => 46,
-                    ),
-
-                    // Anoop will act as key
-                    "Anoop" => array(
-
-                        // Subject and marks are
-                        // the key value pair
-                        "C" => 88,
-                        "DCO" => 46,
-                        "FOL" => 99,
-                    ),*/
 
                 return $forecast;
 
-                /*return array($current_temperature = mt_rand(0,30),
-                    $current_state = "test",
-                    $current_temperature_min = $current_temperature - mt_rand(0, 5),
-                    $current_temperature_max  = $current_temperature + mt_rand(0, 5),
-                    $current_wind_speed = mt_rand(0, 200),
-                    $current_wind_direction = mt_rand(0, 360));*/
 
             } else {
                 return "go away";
@@ -277,9 +240,4 @@ class WeatherServer
         }
     }
 
-//weatherforecast
-    //array zurückgeben
-
-//self eigene klasse
-//this im eigenen objekt
 }
