@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+scp -r * google:rest_server
+# scp -r * ec2-rest:rest_server

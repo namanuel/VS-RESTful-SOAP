@@ -1,0 +1,14 @@
+# Autho: Benjamin Medicke
+
+version: '3'
+
+services:
+  rest-api:
+    build: ./rest-api
+    environment:
+      - TZ=Europe/Berlin
+    volumes:
+      - ./rest-api:/usr/src/app
+    ports:
+      - "80:5000"
+
