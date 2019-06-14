@@ -1,10 +1,12 @@
 <?php
-$data = array("name" => $_POST['light']);
+
+$url = "http://35.238.84.142/api/blinds";
+$data = array("status"=>$_GET["status"]);
 $data_string = json_encode($data);
 
-$ch = curl_init('http://35.238.84.142/api/lights');
+$ch = curl_init($url);
 
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -14,5 +16,4 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 );
 
 curl_exec($ch);
-
 header('Location: ' . $_SERVER['HTTP_REFERER']);

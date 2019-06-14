@@ -1,7 +1,6 @@
-
-
 <?php
-
+    $SANITIZE = False; # disabled because it's funny :)
+    
 $i = isset($_GET["page"]) ? $_GET["page"] : 1;
 switch ($i) {
     case 1:
@@ -57,7 +56,8 @@ EOL;
             echo $list['id'];
             echo "</td>";
             echo "<td>";
-            echo $list['name'];
+            if ($SANITIZE == False) { echo $list['name']; }
+            else  { echo filter_var($list['name'], FILTER_SANITIZE_STRING); }
             echo "</td>";
             echo "<td>";
             echo $list['brightness'];
@@ -66,13 +66,13 @@ EOL;
             echo $list['status'];
             echo "</td>";
             echo "<td>";
-            echo "<a type='button' role='button' href='light.php?&id=".$list['id']."&state=1"."&brightness=".$list['brightness']."' class='btn btn-success '>ON</a>";
-            echo "<a type='button' role='button' href='light.php?&id=".$list['id']."&state=0"."&brightness=".$list['brightness']."' class='btn btn-danger ml-1 '>OFF</a>";
-            echo "<a type='button' role='button' href='delete_light.php?&id=".$list['id']."' class='btn btn-primary ml-1 '>Delete</a>";
+            echo "<a role='button' href='light.php?&id=".$list['id']."&state=1"."&brightness=".$list['brightness']."' class='btn btn-success '>ON</a>";
+            echo "<a role='button' href='light.php?&id=".$list['id']."&state=0"."&brightness=".$list['brightness']."' class='btn btn-danger ml-1 '>OFF</a>";
+            echo "<a role='button' href='delete_light.php?&id=".$list['id']."' class='btn btn-primary ml-1 '>Delete</a>";
             echo "</td>";
             echo"</tr>";
         }
-
+ 
        echo "</tbody>";
         echo "</table>";
 
@@ -80,11 +80,21 @@ EOL;
 
 <div class="container">
     <form action="create_light.php" method="post">
+    <h1>Anlegen</h1>
     <p>Light-Name: <input type="text" name="light" />
+    
+    <input type="submit" class="d-inline"/></p>
+</form>
+    <form action="light_dim.php" method="post">
+        <h1>Dimmen</h1>
+     <p>Light-ID: <input type="text" name="light_id" />
+    <p>Brightness: <input type="number" min="0" max="100" name="bright" />
     <input type="submit" class="d-inline"/></p>
 </form>
 </div>
 
+        <a role='button' href='lights.php?status=1' class='btn btn-success'>All lights on</a>
+        <a role='button' href='lights.php?status=0' class='btn btn-danger'>All lights off</a>
 
 EOL;
 
@@ -117,9 +127,9 @@ EOL;
             echo $list['status'];
             echo "</td>";
             echo "<td>";
-            echo "<a type='button' role='button' href='blind.php?&id=".$list['id']."&state=0"."' class='btn btn-success '>UP</a>";
-            echo "<a type='button' role='button' href='blind.php?&id=".$list['id']."&state=1"."' class='btn btn-danger ml-1 '>DOWN</a>";
-            echo "<a type='button' role='button' href='delete_blinds.php?&id=".$list['id']."' class='btn btn-primary ml-1 '>Delete</a>";
+            echo "<a role='button' href='blind.php?&id=".$list['id']."&state=0"."' class='btn btn-success '>UP</a>";
+            echo "<a role='button' href='blind.php?&id=".$list['id']."&state=1"."' class='btn btn-danger ml-1 '>DOWN</a>";
+            echo "<a role='button' href='delete_blinds.php?&id=".$list['id']."' class='btn btn-primary ml-1 '>Delete</a>";
             echo "</td>";
             echo"</tr>";
         }
@@ -136,6 +146,8 @@ EOL;
 </form>
 </div>
 
+        <a role='button' href='blinds.php?status=0' class='btn btn-success'>All blinds up</a>
+        <a role='button' href='blinds.php?status=1' class='btn btn-danger'>All blinds down</a>
 
 EOL;
 
@@ -176,8 +188,8 @@ EOL;
             echo $list['status'];
             echo "</td>";
             echo "<td>";
-            echo "<a type='button' role='button' href='scene.php?&scene_id=".$list['scene_id']."' class='btn btn-success'>Enable</a>";
-            echo "<a type='button' role='button' href='delete_scenes.php?&scene_id=".$list['scene_id']."' class='btn btn-primary ml-1 '>Delete</a>";
+            echo "<a role='button' href='scene.php?&scene_id=".$list['scene_id']."' class='btn btn-success'>Enable</a>";
+            echo "<a role='button' href='delete_scenes.php?&scene_id=".$list['scene_id']."' class='btn btn-primary ml-1 '>Delete</a>";
             echo "</td>";
             echo"</tr>";
         }

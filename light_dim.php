@@ -1,10 +1,12 @@
 <?php
-$data = array("name" => $_POST['light']);
+$url = "http://35.238.84.142/api/lights/";
+$data = array("status"=>"1","brightness" => $_POST['bright']);
 $data_string = json_encode($data);
 
-$ch = curl_init('http://35.238.84.142/api/lights');
 
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+$ch = curl_init($url.$_POST["light_id"]);
+
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(

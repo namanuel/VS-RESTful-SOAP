@@ -17,5 +17,3 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 
 curl_exec($ch);
 header('Location: ' . $_SERVER['HTTP_REFERER']);
-
-
